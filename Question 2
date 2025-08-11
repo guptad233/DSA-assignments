@@ -1,0 +1,58 @@
+// Question-2 
+
+ #include<stdio.h>
+
+int main()
+{
+    int size, newSize = 0;
+    
+    printf("Enter size of array: ");
+    scanf("%d", &size);
+    
+    int arr[size];
+    
+    printf("Enter array elements: ");
+    for(int i = 0; i < size; i++)
+    {
+        scanf("%d", &arr[i]);
+    }
+    
+    printf("Original array: ");
+    for(int i = 0; i < size; i++)
+    {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+    
+    for(int i = 0; i < size; i++)
+    {
+        int isDuplicate = 0;
+        
+        for(int j = 0; j < newSize; j++)
+        {
+            if(arr[i] == arr[j])
+            {
+                isDuplicate = 1;
+                break;
+            }
+        }
+        
+        if(!isDuplicate)
+        {
+            arr[newSize] = arr[i];
+            newSize++;
+        }
+    }
+    
+    printf("Array after removing duplicates: ");
+    for(int i = 0; i < newSize; i++)
+    {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+    
+    printf("New size of array: %d\n", newSize);
+    
+    return 0;
+}
+
