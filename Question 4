@@ -1,0 +1,156 @@
+// Q-4 ANSWER (a)
+
+#include<stdio.h>
+
+void reverse(int arr[], int size)
+{
+    int temp;
+    for(int i = 0; i < size/2; i++)
+    {
+        temp = arr[i];
+        arr[i] = arr[size-1-i];
+        arr[size-1-i] = temp;
+    }
+}
+
+int main()
+{
+    int size;
+    printf("Enter size of array: ");
+    scanf("%d", &size);
+    
+    int arr[size];
+    printf("Enter array elements:\n");
+    for(int i = 0; i < size; i++)
+    {
+        scanf("%d", &arr[i]);
+    }
+    
+    reverse(arr, size);
+    
+    printf("Reversed array:\n");
+    for(int i = 0; i < size; i++)
+    {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+    
+    return 0;
+}
+
+// (b)
+#include<stdio.h>
+
+int main()
+{
+    int r1, c1, r2, c2;
+    
+    printf("Enter rows and columns of first matrix: ");
+    scanf("%d %d", &r1, &c1);
+    
+    printf("Enter rows and columns of second matrix: ");
+    scanf("%d %d", &r2, &c2);
+    
+    if(c1 != r2)
+    {
+        printf("Matrix multiplication not possible\n");
+        return 0;
+    }
+    
+    int a[r1][c1], b[r2][c2], result[r1][c2];
+    
+    printf("Enter elements of first matrix:\n");
+    for(int i = 0; i < r1; i++)
+    {
+        for(int j = 0; j < c1; j++)
+        {
+            scanf("%d", &a[i][j]);
+        }
+    }
+    
+    printf("Enter elements of second matrix:\n");
+    for(int i = 0; i < r2; i++)
+    {
+        for(int j = 0; j < c2; j++)
+        {
+            scanf("%d", &b[i][j]);
+        }
+    }
+    
+    for(int i = 0; i < r1; i++)
+    {
+        for(int j = 0; j < c2; j++)
+        {
+            result[i][j] = 0;
+            for(int k = 0; k < c1; k++)
+            {
+                result[i][j] += a[i][k] * b[k][j];
+            }
+        }
+    }
+    
+    printf("Result matrix:\n");
+    for(int i = 0; i < r1; i++)
+    {
+        for(int j = 0; j < c2; j++)
+        {
+            printf("%d ", result[i][j]);
+        }
+        printf("\n");
+    }
+    
+    return 0;
+}*/
+
+//(c)
+
+/*#include<stdio.h>
+
+int main()
+{
+    int rows, cols;
+    
+    printf("Enter rows and columns of matrix: ");
+    scanf("%d %d", &rows, &cols);
+    
+    int matrix[rows][cols], transpose[cols][rows];
+    
+    printf("Enter elements of matrix:\n");
+    for(int i = 0; i < rows; i++)
+    {
+        for(int j = 0; j < cols; j++)
+        {
+            scanf("%d", &matrix[i][j]);
+        }
+    }
+    
+    for(int i = 0; i < rows; i++)
+    {
+        for(int j = 0; j < cols; j++)
+        {
+            transpose[j][i] = matrix[i][j];
+        }
+    }
+    
+    printf("Original matrix:\n");
+    for(int i = 0; i < rows; i++)
+    {
+        for(int j = 0; j < cols; j++)
+        {
+            printf("%d ", matrix[i][j]);
+        }
+        printf("\n");
+    }
+    
+    printf("Transpose matrix:\n");
+    for(int i = 0; i < cols; i++)
+    {
+        for(int j = 0; j < rows; j++)
+        {
+            printf("%d ", transpose[i][j]);
+        }
+        printf("\n");
+    }
+    
+    return 0;
+}
