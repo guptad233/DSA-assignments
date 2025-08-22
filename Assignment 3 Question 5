@@ -1,0 +1,191 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <math.h>
+#define MAX_SIZE 1000
+
+typedef struct {
+    int data[MAX_SIZE];
+    int top;
+} IntStack;
+
+void initStack(IntStack* stack) {
+    stack->top = -1;
+}
+
+int isEmpty(IntStack* stack) {
+    return stack->top == -1;
+}
+
+int isFull(IntStack* stack) {
+    return stack->top == MAX_SIZE - 1;
+}
+
+void push(IntStack* stack, int value) {
+    if (!isFull(stack)) {
+        stack->data[++stack->top] = value;
+    }
+}
+
+int pop(IntStack* stack) {
+    if (!isEmpty(stack)) {
+        return stack->data[stack->top--];
+    }
+    return 0;
+}
+
+int isOperator(char ch) {
+    return (ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '^');
+}
+
+int performOperation(int operand1, int operand2, char operator) {
+    switch (operator) {
+        case '+':
+            return operand1 + operand2;
+        case '-':
+            return operand1 - operand2;
+        case '*':
+            return operand1 * operand2;
+        case '/':
+            if (operand2 != 0) {
+                return operand1 / operand2;
+            } else {
+                printf("Error: Division by zero\n");
+                return 0;
+            }
+        case '^':
+            return (int)pow(operand1, operand2);
+        default:
+            return 0;
+    }
+}
+
+int evaluatePostfix(char* postfix) {
+    IntStack stack;
+    initStack(&stack);
+    int len = strlen(postfix);
+    
+    for (int i = 0; i < len; i++) {
+        char ch = postfix[i];
+        
+        if (isspace(ch)) {
+            continue;
+        }
+        
+        if (isdigit(ch)) {
+            push(&stack, ch - '0');
+        }
+        else if (isOperator(ch)) {
+            if (isEmpty(&stack)) {
+                printf("Error: Invalid postfix expression\n");
+                return 0;
+            }
+            int operand2 = pop(&stack);
+            
+            if (isEmpty(&stack)) {
+                printf("Error: Invalid postfix expression\n");
+                return 0;
+            }
+            int operand1 = pop(&stack);
+            
+            int result = performOperation(operand1, operand2, ch);
+            push(&stack, result);
+            
+            printf("Step: %d %c %d = %d\n", operand1, ch, operand2, result);
+        }
+    }
+    
+    if (!isEmpty(&stack)) {
+        return pop(&stack);
+    } else {
+        printf("Error: Invalid postfix expression\n");
+        return 0;
+    }
+}
+
+int evaluatePostfixMultiDigit(char* postfix) {
+    IntStack stack;
+    initStack(&stack);
+    int len = strlen(postfix);
+    int i = 0;
+    
+    while (i < len) {
+        if (isspace(postfix[i])) {
+            i++;
+            continue;
+        }
+        
+        if (isdigit(postfix[i])) {
+            int num = 0;
+            while (i < len && isdigit(postfix[i])) {
+                num = num * 10 + (postfix[i] - '0');
+                i++;
+            }
+            push(&stack, num);
+        }
+        else if (isOperator(postfix[i])) {
+            if (isEmpty(&stack)) {
+                printf("Error: Invalid postfix expression\n");
+                return 0;
+            }
+            int operand2 = pop(&stack);
+            
+            if (isEmpty(&stack)) {
+                printf("Error: Invalid postfix expression\n");
+                return 0;
+            }
+            int operand1 = pop(&stack);
+            
+            int result = performOperation(operand1, operand2, postfix[i]);
+            push(&stack, result);
+            
+            printf("Step: %d %c %d = %d\n", operand1, postfix[i], operand2, result);
+            i++;
+        }
+        else {
+            i++;
+        }
+    }
+    
+    if (!isEmpty(&stack)) {
+        return pop(&stack);
+    } else {
+        printf("Error: Invalid postfix expression\n");
+        return 0;
+    }
+}
+
+int main() {
+    char postfix[MAX_SIZE];
+    
+    printf("Enter a postfix expression: ");
+    fgets(postfix, sizeof(postfix), stdin);
+    
+    postfix[strcspn(postfix, "\n")] = '\0';
+    
+    printf("Postfix expression: %s\n", postfix);
+    printf("Evaluation steps:\n");
+    
+    int result = evaluatePostfixMultiDigit(postfix);
+    printf("Final result: %d\n", result);
+    
+    char testExpressions[][50] = {
+        "23+",
+        "234*+",
+        "23*54*+",
+        "15+2*",
+        "52-3*",
+        "23+4*"
+    };
+    
+    int numTests = sizeof(testExpressions) / sizeof(testExpressions[0]);
+    
+    printf("\nTesting various postfix expressions:\n");
+    for (int i = 0; i < numTests; i++) {
+        printf("\nPostfix: %s\n", testExpressions[i]);
+        int res = evaluatePostfix(testExpressions[i]);
+        printf("Result: %d\n", res);
+    }
+    
+    return 0;
+}
