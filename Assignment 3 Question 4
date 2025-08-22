@@ -1,0 +1,142 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define MAX_SIZE 1000
+
+typedef struct {
+    char data[MAX_SIZE];
+    int top;
+} CharStack;
+
+void initStack(CharStack* stack) {
+    stack->top = -1;
+}
+
+int isEmpty(CharStack* stack) {
+    return stack->top == -1;
+}
+
+int isFull(CharStack* stack) {
+    return stack->top == MAX_SIZE - 1;
+}
+
+void push(CharStack* stack, char ch) {
+    if (!isFull(stack)) {
+        stack->data[++stack->top] = ch;
+    }
+}
+
+char pop(CharStack* stack) {
+    if (!isEmpty(stack)) {
+        return stack->data[stack->top--];
+    }
+    return '\0';
+}
+
+char peek(CharStack* stack) {
+    if (!isEmpty(stack)) {
+        return stack->data[stack->top];
+    }
+    return '\0';
+}
+
+int isOperator(char ch) {
+    return (ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '^');
+}
+
+int precedence(char op) {
+    switch (op) {
+        case '+':
+        case '-':
+            return 1;
+        case '*':
+        case '/':
+            return 2;
+        case '^':
+            return 3;
+        default:
+            return 0;
+    }
+}
+
+int isRightAssociative(char op) {
+    return (op == '^');
+}
+
+void infixToPostfix(char* infix, char* postfix) {
+    CharStack stack;
+    initStack(&stack);
+    int i = 0, j = 0;
+    int len = strlen(infix);
+    
+    for (i = 0; i < len; i++) {
+        char ch = infix[i];
+        
+        if (isspace(ch)) {
+            continue;
+        }
+        
+        if (isalnum(ch)) {
+            postfix[j++] = ch;
+        }
+        else if (ch == '(') {
+            push(&stack, ch);
+        }
+        else if (ch == ')') {
+            while (!isEmpty(&stack) && peek(&stack) != '(') {
+                postfix[j++] = pop(&stack);
+            }
+            if (!isEmpty(&stack)) {
+                pop(&stack);
+            }
+        }
+        else if (isOperator(ch)) {
+            while (!isEmpty(&stack) && peek(&stack) != '(' &&
+                   ((precedence(peek(&stack)) > precedence(ch)) ||
+                    (precedence(peek(&stack)) == precedence(ch) && !isRightAssociative(ch)))) {
+                postfix[j++] = pop(&stack);
+            }
+            push(&stack, ch);
+        }
+    }
+    
+    while (!isEmpty(&stack)) {
+        postfix[j++] = pop(&stack);
+    }
+    
+    postfix[j] = '\0';
+}
+
+int main() {
+    char infix[MAX_SIZE];
+    char postfix[MAX_SIZE];
+    
+    printf("Enter an infix expression: ");
+    fgets(infix, sizeof(infix), stdin);
+    
+    infix[strcspn(infix, "\n")] = '\0';
+    
+    infixToPostfix(infix, postfix);
+    
+    printf("Infix expression: %s\n", infix);
+    printf("Postfix expression: %s\n", postfix);
+    
+    char testExpressions[][50] = {
+        "A+B*C",
+        "(A+B)*C",
+        "A+B*C-D",
+        "A^B^C",
+        "(A+B)*(C-D)",
+        "A+B*C^D-E"
+    };
+    
+    int numTests = sizeof(testExpressions) / sizeof(testExpressions[0]);
+    
+    printf("\nTesting various infix expressions:\n");
+    for (int i = 0; i < numTests; i++) {
+        infixToPostfix(testExpressions[i], postfix);
+        printf("Infix: %-15s -> Postfix: %s\n", testExpressions[i], postfix);
+    }
+    
+    return 0;
+}
