@@ -1,1 +1,95 @@
+#include <stdio.h>
+#include <stdlib.h>
 
+int countDistinct(int arr[], int n) {
+    int count = 0;
+    for (int i = 0; i < n; i++) {
+        int j;
+        for (j = 0; j < i; j++) {
+            if (arr[i] == arr[j]) break;
+        }
+        if (i == j) {
+            count++;
+            printf("Distinct element: %d\n", arr[i]);
+        }
+    }
+    return count;
+}
+
+int compare(const void* a, const void* b) {
+    return (*(int*)a - *(int*)b);
+}
+
+int countDistinctSorted(int arr[], int n) {
+    qsort(arr, n, sizeof(int), compare);
+    int count = 1;
+    printf("Sorted array: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+    
+    printf("Distinct elements: %d", arr[0]);
+    for (int i = 1; i < n; i++) {
+        if (arr[i] != arr[i - 1]) {
+            count++;
+            printf(" %d", arr[i]);
+        }
+    }
+    printf("\n");
+    return count;
+}
+
+int countDistinctHashing(int arr[], int n) {
+    int maxElement = arr[0];
+    for (int i = 1; i < n; i++) {
+        if (arr[i] > maxElement) {
+            maxElement = arr[i];
+        }
+    }
+    
+    int* hash = calloc(maxElement + 1, sizeof(int));
+    int count = 0;
+    
+    for (int i = 0; i < n; i++) {
+        if (hash[arr[i]] == 0) {
+            hash[arr[i]] = 1;
+            count++;
+        }
+    }
+    
+    printf("Distinct elements using hashing: ");
+    for (int i = 0; i <= maxElement; i++) {
+        if (hash[i] == 1) {
+            printf("%d ", i);
+        }
+    }
+    printf("\n");
+    
+    free(hash);
+    return count;
+}
+
+int main() {
+    int arr[] = {12, 10, 9, 45, 2, 10, 10, 45};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    
+    printf("Original array: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+    
+    int distinctCount1 = countDistinct(arr, n);
+    printf("Total distinct elements (Method 1): %d\n\n", distinctCount1);
+    
+    int arr2[] = {12, 10, 9, 45, 2, 10, 10, 45};
+    int distinctCount2 = countDistinctSorted(arr2, n);
+    printf("Total distinct elements (Sorted method): %d\n\n", distinctCount2);
+    
+    int arr3[] = {12, 10, 9, 45, 2, 10, 10, 45};
+    int distinctCount3 = countDistinctHashing(arr3, n);
+    printf("Total distinct elements (Hashing method): %d\n", distinctCount3);
+    
+    return 0;
+}
