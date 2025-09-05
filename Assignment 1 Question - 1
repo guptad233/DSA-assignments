@@ -3,7 +3,7 @@
  #include<stdio.h>
 
 int arr[100];
-int size = 0;
+int size;
 
 void create()
 {
@@ -19,6 +19,13 @@ void create()
 
 void display()
 {
+    printf("Enter size of array: ");
+    scanf("%d", &size);
+    printf("\nEnter %d elements: ", size);
+    for(int i = 0; i < size; i++)
+    {
+        scanf("%d", &arr[i]);
+    }
     if(size == 0)
     {
         printf("Array is empty!\n");
@@ -34,6 +41,13 @@ void display()
 
 void insert()
 {
+    printf("Enter size of array: ");
+    scanf("%d", &size);
+    printf("\nEnter %d elements: ", size);
+    for(int i = 0; i < size; i++)
+    {
+        scanf("%d", &arr[i]);
+    }
     int pos, element;
     if(size >= 100)
     {
@@ -57,10 +71,21 @@ void insert()
     arr[pos] = element;
     size++;
     printf("Element inserted successfully!\n");
+    for(int i = 0; i < size; i++)
+    {
+        printf(" %d ", arr[i]);
+    }
 }
 
 void delete()
 {
+    printf("Enter size of array: ");
+    scanf("%d", &size);
+    printf("\nEnter %d elements: ", size);
+    for(int i = 0; i < size; i++)
+    {
+        scanf("%d", &arr[i]);
+    }
     int pos;
     if(size == 0)
     {
@@ -81,10 +106,21 @@ void delete()
     }
     size--;
     printf("Element deleted successfully!\n");
+    for(int i = 0; i < size; i++)
+    {
+        printf(" %d ", arr[i]);
+    }
 }
 
 void linearSearch()
 {
+    printf("Enter size of array: ");
+    scanf("%d", &size);
+    printf("\nEnter %d elements: ", size);
+    for(int i = 0; i < size; i++)
+    {
+        scanf("%d", &arr[i]);
+    }
     int element, found = 0;
     if(size == 0)
     {
@@ -151,4 +187,7 @@ int main()
     
     return 0;
 }
+
+
+
 
