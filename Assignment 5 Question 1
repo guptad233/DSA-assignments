@@ -1,0 +1,136 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Node* head = NULL;
+
+void insertBeginning(int val) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = val;
+    newNode->next = head;
+    head = newNode;
+}
+
+void insertEnd(int val) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = val;
+    newNode->next = NULL;
+    if (head == NULL) head = newNode;
+    else {
+        struct Node* temp = head;
+        while (temp->next) temp = temp->next;
+        temp->next = newNode;
+    }
+}
+
+void insertAfter(int key, int val) {
+    struct Node* temp = head;
+    while (temp && temp->data != key) temp = temp->next;
+    if (temp) {
+        struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+        newNode->data = val;
+        newNode->next = temp->next;
+        temp->next = newNode;
+    }
+}
+
+void insertBefore(int key, int val) {
+    if (head == NULL) return;
+    if (head->data == key) {
+        insertBeginning(val);
+        return;
+    }
+    struct Node* temp = head;
+    while (temp->next && temp->next->data != key) temp = temp->next;
+    if (temp->next) {
+        struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+        newNode->data = val;
+        newNode->next = temp->next;
+        temp->next = newNode;
+    }
+}
+
+void deleteBeginning() {
+    if (head == NULL) return;
+    struct Node* temp = head;
+    head = head->next;
+    free(temp);
+}
+
+void deleteEnd() {
+    if (head == NULL) return;
+    if (head->next == NULL) {
+        free(head);
+        head = NULL;
+        return;
+    }
+    struct Node* temp = head;
+    while (temp->next->next) temp = temp->next;
+    free(temp->next);
+    temp->next = NULL;
+}
+
+void deleteNode(int key) {
+    if (head == NULL) return;
+    if (head->data == key) {
+        struct Node* temp = head;
+        head = head->next;
+        free(temp);
+        return;
+    }
+    struct Node* temp = head;
+    while (temp->next && temp->next->data != key) temp = temp->next;
+    if (temp->next) {
+        struct Node* del = temp->next;
+        temp->next = del->next;
+        free(del);
+    }
+}
+
+void search(int key) {
+    struct Node* temp = head;
+    int pos = 1;
+    while (temp) {
+        if (temp->data == key) {
+            printf("Found at position %d\n", pos);
+            return;
+        }
+        temp = temp->next;
+        pos++;
+    }
+    printf("Not found\n");
+}
+
+void display() {
+    struct Node* temp = head;
+    while (temp) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+int main() {
+    int ch, val, key;
+    while (1) {
+        printf("1.InsertBeg 2.InsertEnd 3.InsertBefore 4.InsertAfter 5.DelBeg 6.DelEnd 7.DelNode 8.Search 9.Display 10.Exit\n");
+        scanf("%d", &ch);
+        switch (ch) {
+            case 1: scanf("%d", &val); insertBeginning(val); break;
+            case 2: scanf("%d", &val); insertEnd(val); break;
+            case 3: scanf("%d %d", &key, &val); insertBefore(key, val); break;
+            case 4: scanf("%d %d", &key, &val); insertAfter(key, val); break;
+            case 5: deleteBeginning(); break;
+            case 6: deleteEnd(); break;
+            case 7: scanf("%d", &key); deleteNode(key); break;
+            case 8: scanf("%d", &key); search(key); break;
+            case 9: display(); break;
+            case 10: exit(0);
+        }
+    }
+    return 0;
+}
