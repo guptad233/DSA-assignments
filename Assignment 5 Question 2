@@ -1,1 +1,65 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Node* head = NULL;
+
+void insertEnd(int val) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = val;
+    newNode->next = NULL;
+    if (!head) head = newNode;
+    else {
+        struct Node* temp = head;
+        while (temp->next) temp = temp->next;
+        temp->next = newNode;
+    }
+}
+
+int deleteKey(int key) {
+    int count = 0;
+    while (head && head->data == key) {
+        struct Node* temp = head;
+        head = head->next;
+        free(temp);
+        count++;
+    }
+    struct Node* temp = head;
+    while (temp && temp->next) {
+        if (temp->next->data == key) {
+            struct Node* del = temp->next;
+            temp->next = del->next;
+            free(del);
+            count++;
+        } else temp = temp->next;
+    }
+    return count;
+}
+
+void display() {
+    struct Node* temp = head;
+    while (temp) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+int main() {
+    int n, x, key;
+    scanf("%d", &n);
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &x);
+        insertEnd(x);
+    }
+    scanf("%d", &key);
+    int c = deleteKey(key);
+    printf("%d\n", c);
+    display();
+    return 0;
+}
 
