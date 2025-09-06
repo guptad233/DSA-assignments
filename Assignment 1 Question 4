@@ -8,7 +8,7 @@ void reverse(int arr[], int size)
     for(int i = 0; i < size/2; i++)
     {
         temp = arr[i];
-        arr[i] = arr[size-1-i];
+        arr[i] = arr[size-1-i];  //  swapping mechanism.
         arr[size-1-i] = temp;
     }
 }
@@ -38,7 +38,12 @@ int main()
     return 0;
 }
 
+
+
+
+
 // (b)
+
 #include<stdio.h>
 
 int main()
@@ -101,6 +106,11 @@ int main()
     
     return 0;
 }*/
+
+
+
+
+
 
 //(c)
 
