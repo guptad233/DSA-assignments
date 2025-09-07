@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <string.h>
 #define MAX_SIZE 1000
@@ -47,22 +48,12 @@ void reverseString(char str[]) {
 }
 
 int main() {
-    char str[MAX_SIZE];
     
-    printf("Enter a string: ");
-    scanf("%s", str);
-    
-    printf("Original string: %s\n", str);
-    
-    reverseString(str);
-    
-    printf("Reversed string: %s\n", str);
-    
-    char example[] = "DataStructure";
+    char str[] = "DataStructure";
     printf("\nExample:\n");
-    printf("Original: %s\n", example);
-    reverseString(example);
-    printf("Reversed: %s\n", example);
+    printf("Original: %s\n", str);
+    reverseString(str);
+    printf("Reversed: %s\n", str);
     
     return 0;
 }
