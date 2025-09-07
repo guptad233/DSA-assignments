@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <string.h>
 #define MAX_SIZE 1000
@@ -53,7 +54,7 @@ int isMatchingPair(char opening, char closing) {
             (opening == '{' && closing == '}'));
 }
 
-int isBalanced(char* expression) {
+int isBalanced(char expression[]) {
     CharStack stack;
     initStack(&stack);
     int len = strlen(expression);
@@ -90,22 +91,6 @@ int main() {
         printf("The expression '%s' does not have balanced parentheses.\n", expression);
     }
     
-    char testExpressions[][50] = {
-        "{[()]}",
-        "((()))",
-        "{[}]",
-        "(((",
-        "()[]{}",
-        "([)]"
-    };
-    
-    int numTests = sizeof(testExpressions) / sizeof(testExpressions[0]);
-    
-    printf("\nTesting various expressions:\n");
-    for (int i = 0; i < numTests; i++) {
-        printf("%s -> %s\n", testExpressions[i], 
-               isBalanced(testExpressions[i]) ? "Balanced" : "Not Balanced");
-    }
     
     return 0;
 }
