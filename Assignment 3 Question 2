@@ -32,7 +32,7 @@ char pop(CharStack* stack) {
     return '\0';
 }
 
-void reverseString(char* str) {
+void reverseString(char str[]) {
     CharStack stack;
     initStack(&stack);
     int len = strlen(str);
